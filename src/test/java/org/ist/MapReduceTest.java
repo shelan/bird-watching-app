@@ -6,7 +6,6 @@ package org.ist;
  *
  */
 
-import org.apache.hadoop.mrunit.mapreduce.MapReduceDriver;
 import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,10 +25,10 @@ public class MapReduceTest {
 
     @Before
     public void setUp() {
-        Mapper mapper = new Mapper();
-        Reducer reducer = new Reducer();
-        mapDriver = MapDriver.newMapDriver(mapper);
-        reduceDriver = ReduceDriver.newReduceDriver(reducer);
+        Q3Mapper q3Mapper = new Q3Mapper();
+        Q3Reducer q3Reducer = new Q3Reducer();
+        mapDriver = MapDriver.newMapDriver(q3Mapper);
+        reduceDriver = ReduceDriver.newReduceDriver(q3Reducer);
     }
 
     @Test
