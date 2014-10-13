@@ -14,13 +14,21 @@ import java.util.StringTokenizer;
  * input file format
  * Sintra-1, 2013-10-09, 17:54.01, eagle-25, 3, 120, 0.
  *
- * Mapper for "List all tagged birds that have not been observed for more than one week"
+ * Q3Mapper for "List all tagged birds that have not been observed for more than one week"
  */
-public class Mapper  extends org.apache.hadoop.mapreduce.Mapper<Text, Text, Text, Text> {
+public class Q3Mapper extends org.apache.hadoop.mapreduce.Mapper<Text, Text, Text, Text> {
 
     private Text birdToken = new Text();
     private Text lastSeenDate = new Text();
 
+    /**
+     *  Q3Mapper function
+     * @param key
+     * @param value
+     * @param context
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public void map(Text key, Text value, Context context
     ) throws IOException, InterruptedException {
         StringTokenizer itr = new StringTokenizer(value.toString(),",");

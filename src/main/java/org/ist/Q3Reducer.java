@@ -12,8 +12,16 @@ import java.util.Date;
 /**
  * Created by shelan on 10/11/14.
  */
-public class Reducer extends org.apache.hadoop.mapreduce.Reducer<Text, Text, Text ,Text> {
+public class Q3Reducer extends org.apache.hadoop.mapreduce.Reducer<Text, Text, Text ,Text> {
 
+    /**
+     * Q3Reducer Function
+     * @param key
+     * @param values
+     * @param context
+     * @throws IOException
+     * @throws InterruptedException
+     */
     @Override
     protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 
