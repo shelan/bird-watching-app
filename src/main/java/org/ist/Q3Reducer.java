@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by shelan on 10/11/14.
@@ -26,6 +27,7 @@ public class Q3Reducer extends org.apache.hadoop.mapreduce.Reducer<Text, Text, T
     protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 
         DateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+        TimeZone.setDefault(TimeZone.getTimeZone("WET"));
         Text lastSeenDateString = new Text();
         //initialized to epoc time
         Date lastSeenDate = new Date(0);
