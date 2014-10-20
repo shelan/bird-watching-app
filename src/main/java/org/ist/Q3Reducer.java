@@ -26,23 +26,30 @@ public class Q3Reducer extends org.apache.hadoop.mapreduce.Reducer<Text, Text, T
     @Override
     protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 
-        DateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         TimeZone.setDefault(TimeZone.getTimeZone("WET"));
         Text lastSeenDateString = new Text();
         //initialized to epoc time
-        Date lastSeenDate = new Date(0);
+        long lastSeenDate = 0L;
+        System.out.println("token of :"+key);
         for (Text value : values) {
+            //System.out.println("token:"+ key + " value :" + value );
             try {
+                System.out.println("last seen date"+lastSeenDate);
                Date newDate = formatter.parse(String.valueOf(value));
+                System.out.println("formatted date"+newDate.toString()+"\n");
+               long newTime = newDate.getTime();
 
-               if(lastSeenDate.before(newDate)){
-                     lastSeenDate = newDate;
+               if(lastSeenDate < newTime){
+                     lastSeenDate = newTime;
                 }
+               // System.out.println("last seen date "+ (new Date(lastSeenDate).toString()) );
             } catch (ParseException e) {
                 System.out.println("Error while parsing the date field");
             }
         }
-        lastSeenDateString.set(lastSeenDate.toString());
+
+        lastSeenDateString.set(formatter.format(new Date(lastSeenDate)));
         context.write(key,lastSeenDateString);
     }
 }
