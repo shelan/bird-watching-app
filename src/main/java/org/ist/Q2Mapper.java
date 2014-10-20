@@ -42,8 +42,8 @@ public class Q2Mapper extends Mapper<LongWritable, Text, Text, Text>
 			if (!tokens[0].isEmpty() && !tokens[1].isEmpty() && !tokens[4].isEmpty() && Float.parseFloat(tokens[4]) != 0)
 			{
 				//Q2date:towerid
-				String dateTidCombined = Utils.PREFIX_Q2.concat(tokens[1]).concat(Utils.KEY_SEPERATOR).concat(tokens[0]);
-				keyDateTid.set(dateTidCombined);
+				String dateTidCombined = tokens[1].concat(Utils.KEY_SEPERATOR).concat(tokens[0]);
+				keyDateTid.set("Q2"+dateTidCombined);
 				birdWeight.set(tokens[4]);
 				context.write(keyDateTid, birdWeight);
 			}
