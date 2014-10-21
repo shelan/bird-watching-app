@@ -32,7 +32,7 @@ public class DBConnector {
 	}
 
 	// date expect an java.sql.Date object
-	public QueryStatus executeQueryForQ1(Date date, String towerId, double wingSpan) {
+	public QueryStatus executeQueryForQ1(java.util.Date date, String towerId, double wingSpan) {
 		// Check whether database exist/ If not create and insert. If exist only
 		// insert
 		String dbName = "Q1Table";// IF NOT EXISTS
@@ -52,7 +52,7 @@ public class DBConnector {
 
 		try {
 			preparedStatement = getConnection().prepareStatement(insertQuery);
-			preparedStatement.setDate(1, date);
+			preparedStatement.setDate(1, new java.sql.Date(date.getTime()));
 			preparedStatement.setString(2, towerId);
 			preparedStatement.setDouble(3, wingSpan);
 			preparedStatement.executeUpdate();
@@ -66,17 +66,18 @@ public class DBConnector {
 		return QueryStatus.SUCCESS;
 	}
 
-	public QueryStatus executeQueryForQ2(Date date, String towerId, float totalWeight) {
+	public QueryStatus executeQueryForQ2(java.util.Date date, String towerId, float totalWeight) {
 		// Check whether database exist/ If not create and insert. If exist only
 		// insert
 		String dbName = "Q2Table";// IF NOT EXISTS
-		PreparedStatement preparedStatement = null;
+		PreparedStatement preparedStatementCreate = null;
+		PreparedStatement preparedStatementInsert = null;
 		String createQuery = "CREATE TABLE IF NOT EXISTS " + dbName + "(DATE DATE NOT NULL, "
 				+ "TOWER_ID VARCHAR(255) NOT NULL, " + "TOTAL_WEIGHT FLOAT NOT NULL" + ")";
 
 		try {
-			preparedStatement = getConnection().prepareStatement(createQuery);
-			preparedStatement.executeUpdate();
+			preparedStatementCreate = getConnection().prepareStatement(createQuery);
+			preparedStatementCreate.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("table not created");
@@ -85,11 +86,11 @@ public class DBConnector {
 		String insertQuery = "insert into " + dbName + " VALUES (?,?,?)";
 
 		try {
-			preparedStatement = getConnection().prepareStatement(insertQuery);
-			preparedStatement.setDate(1, date);
-			preparedStatement.setString(2, towerId);
-			preparedStatement.setFloat(3, totalWeight);
-			preparedStatement.executeUpdate();
+			preparedStatementInsert = getConnection().prepareStatement(insertQuery);
+			preparedStatementInsert.setDate(1, new java.sql.Date(date.getTime()));
+			preparedStatementInsert.setString(2, towerId);
+			preparedStatementInsert.setFloat(3, totalWeight);
+			preparedStatementInsert.executeUpdate();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			System.out.println("table not created");

@@ -4,9 +4,9 @@
 package org.ist;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.TimeZone;
 
 import org.apache.hadoop.io.Text;
@@ -25,10 +25,10 @@ public class Q2Reducer extends Reducer<Text, Text, Text, Text>
 		String[] keyStrings=key.toString().substring(2,key.toString().length()).split(Utils.KEY_SEPERATOR);
 		Text sumWeight = new Text();
 		float sum = 0;
-		DateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		TimeZone.setDefault(TimeZone.getTimeZone("WET"));
 		try{	
-		Date date = Date.valueOf(keyStrings[0]);
+		Date date = formatter.parse(keyStrings[0]);
 		String towerId=keyStrings[1];
 		key=new Text(keyStrings[0]+":"+keyStrings[1]);
 		for (Text value : values)
