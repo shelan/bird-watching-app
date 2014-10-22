@@ -42,36 +42,6 @@ public class Q2JobConf extends Configured implements Tool
 		
 	}
 
-	
-	private static void addJarToDistributedCache(
-	        Class classToAdd, Configuration conf)
-	    throws IOException {
-	 try{
-	    // Retrieve jar file for class2Add
-	    String jar = classToAdd.getProtectionDomain().
-	            getCodeSource().getLocation().
-	            getPath();
-	    File jarFile = new File(jar);
-	 
-	    // Declare new HDFS location
-	    Path hdfsJar = new Path("lib/"
-	            + jarFile.getName());
-	 
-	    // Mount HDFS
-	    FileSystem hdfs = FileSystem.get(conf);
-	 
-	    // Copy (override) jar file to HDFS
-	    hdfs.copyFromLocalFile(false, true,
-	        new Path(jar), hdfsJar);
-	 
-	    // Add jar to distributed classPath
-	    DistributedCache.addFileToClassPath(hdfsJar, conf);
-	 }
-	 catch(Exception ex){
-		 ex.printStackTrace();
-	 }
-	}
-
 
 	public int run(String[] args) throws Exception {
 		Configuration conf = new Configuration();

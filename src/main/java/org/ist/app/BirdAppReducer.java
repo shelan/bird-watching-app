@@ -20,6 +20,7 @@ import java.util.TimeZone;
 public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
 
     private static Log log = LogFactory.getLog(BirdAppReducer.class);
+    private static DBConnector connector = new DBConnector();
 
     /**
      *
@@ -36,11 +37,21 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
             int keyPrefix = Integer.valueOf(key.toString().substring(0,1));
             switch (keyPrefix) {
                 case 1:
+                    // key - date , value - towerID:span
                     Text biggerSpan = new Text("testElement:0");
                     while (values.iterator().hasNext()){
                         Text tempBigger = getBiggestSpan(biggerSpan, values.iterator().next());
                         biggerSpan.set(tempBigger);
                     }
+                    DateFormat q1Formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    TimeZone.setDefault(TimeZone.getTimeZone("WET"));
+                    // use this when saving to db
+                    long dateQ1 = q1Formatter.parse(String.valueOf(key.toString())).getTime();
+
+                    String value = biggerSpan.toString();
+                    String towerID = value.substring(0,value.lastIndexOf(":"));
+                    String span = value.substring(value.lastIndexOf(":")+1);
+                    connector.executeQueryForQ1(dateQ1, towerID, Double.valueOf(span) );
                     context.write(key,biggerSpan);
                     break;
 
@@ -51,13 +62,14 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
                     DateFormat q2Formatter = new SimpleDateFormat("yyyy-MM-dd");
                     TimeZone.setDefault(TimeZone.getTimeZone("WET"));
                     // use this when saving to db
-                    /* Date date = q2Formatter.parse(String.valueOf(keyStrings[0]));
-                    String towerId = keyStrings[1]; */
+                    long dateQ2 = q2Formatter.parse(String.valueOf(keyStrings[0])).getTime();
+                    String towerId = keyStrings[1];
                     key = new Text(keyStrings[0] + ":" + keyStrings[1]);
-                    for (Text value : values) {
-                        sum += Float.parseFloat(value.toString());
+                    for (Text valueQ2 : values) {
+                        sum += Float.parseFloat(valueQ2.toString());
                     }
-                    //here we have to save the date|tower_id|sum weight   to the database
+                    //here we have to save the date|tower_id|sum weight to the database
+                    connector.executeQueryForQ2(dateQ2, towerId, sum);
                     sumWeight.set(String.valueOf(sum));
                     context.write(key, sumWeight);
                     break;
@@ -69,11 +81,10 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
                     //initialized to epoc time
                     long lastSeenDate = 0L;
                     System.out.println("token of :"+key);
-                    for (Text value : values) {
+                    for (Text valueQ3 : values) {
                             System.out.println("last seen date"+lastSeenDate);
-                            Date newDate = q3Formatter.parse(String.valueOf(value));
-                            System.out.println("formatted date"+newDate.toString()+"\n");
-                            long newTime = newDate.getTime();
+                            long newTime = q3Formatter.parse(String.valueOf(valueQ3)).getTime();
+                            System.out.println("formatted date"+newTime+"\n");
 
                             if(lastSeenDate < newTime){
                                 lastSeenDate = newTime;
