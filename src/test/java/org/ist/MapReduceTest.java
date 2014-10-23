@@ -70,7 +70,7 @@ public class MapReduceTest {
         reduce2Driver.withInput(new Text("Q22013-10-09:Sintra-1"), valuesForQ2);
         reduce2Driver.withOutput(new Text("2013-10-09:Sintra-1"), new Text("8.0"));
 
-        //reduce2Driver.runTest();
+        reduce2Driver.runTest();
         
     }
 }

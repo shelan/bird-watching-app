@@ -56,7 +56,7 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
                     break;
 
                 case 2:
-                    String[] keyStrings=key.toString().substring(1,key.toString().length()).split(Utils.KEY_SEPERATOR);
+                    String[] keyStrings=key.toString().substring(0,key.toString().length()).split(Utils.KEY_SEPERATOR);
                     Text sumWeight = new Text();
                     float sum = 0;
                     DateFormat q2Formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -91,6 +91,7 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
                             }
                     }
                     lastSeenDateString.set(q3Formatter.format(new Date(lastSeenDate)));
+                    connector.executeQueryForQ3(key.toString(), lastSeenDate);
                     context.write(key,lastSeenDateString);
                     break;
             }
