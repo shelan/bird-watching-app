@@ -63,11 +63,12 @@ public class BirdAppMapper extends org.apache.hadoop.mapreduce.Mapper<LongWritab
 
             String dateTidCombined = (logSplitValues[1]).concat(Utils.KEY_SEPERATOR).concat(logSplitValues[0]);
             dateTowerIdCompositeKey.set("2"+ dateTidCombined);
+            
             birdWeight.set(logSplitValues[4]);
             output.write(dateTowerIdCompositeKey, birdWeight);
 
             //Q3:
-            birdIdKey.set(logSplitValues[3]);
+            birdIdKey.set("3" + logSplitValues[3]);
             timeStamp.set(logSplitValues[1] + " " + logSplitValues[2]);
             output.write(birdIdKey,timeStamp);
 
