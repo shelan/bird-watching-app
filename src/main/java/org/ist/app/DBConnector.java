@@ -1,7 +1,6 @@
 package org.ist.app;
 
 import org.ist.QueryStatus;
-
 import java.sql.*;
 
 public class DBConnector {
@@ -9,23 +8,31 @@ public class DBConnector {
 	static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/BirdWatchingDB"; 
 	static final String USER = "root";
 	static final String PASS = "";
+    private Connection dbConnection = null;
 
-	private static Connection getConnection() {
-		Connection conn = null;
-		try {
-			// STEP 2: Register JDBC driver
-			Class.forName("com.mysql.jdbc.Driver");
 
-			// STEP 3: Open a connection
-			System.out.println("Connecting to a selected database...");
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			System.out.println("Connected database successfully...");
-		} catch (Exception ex) {
-			System.out.println("error while establishing the connection");
-			ex.printStackTrace();
-		}
-		return conn;
-	}
+    public DBConnector(){
+        createConnection();
+    }
+
+	public Connection getDbConnection(){
+        return dbConnection;
+    }
+
+    private boolean createConnection(){
+        try {
+            // STEP 2: Register JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+            // STEP 3: Open a connection
+            System.out.println("Connecting to a selected database...");
+            dbConnection = DriverManager.getConnection(DB_URL, USER, PASS);
+            System.out.println("Connected database successfully...");
+        } catch (Exception ex) {
+            System.out.println("error while establishing the connection");
+            ex.printStackTrace();
+        }
+        return (dbConnection!=null);
+    }
 
 	// date expect an java.sql.Date object
 	public QueryStatus executeQueryForQ1(long date, String towerId, double wingSpan) {
@@ -37,7 +44,7 @@ public class DBConnector {
 				+ "TOWER_ID VARCHAR(255) NOT NULL, " + "WING_SPAN BIGINT NOT NULL" + ")";
 
 		try {
-			preparedStatement = getConnection().prepareStatement(createQuery);
+			preparedStatement = getDbConnection().prepareStatement(createQuery);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -47,7 +54,7 @@ public class DBConnector {
 		String insertQuery = "insert into " + dbName + " VALUES (?,?,?)";
 
 		try {
-			preparedStatement = getConnection().prepareStatement(insertQuery);
+			preparedStatement = getDbConnection().prepareStatement(insertQuery);
 			preparedStatement.setLong(1, date);
 			preparedStatement.setString(2, towerId);
 			preparedStatement.setDouble(3, wingSpan);
@@ -72,7 +79,7 @@ public class DBConnector {
 				+ "TOWER_ID VARCHAR(255) NOT NULL, " + "TOTAL_WEIGHT FLOAT NOT NULL" + ")";
 
 		try {
-			preparedStatementCreate = getConnection().prepareStatement(createQuery);
+			preparedStatementCreate = getDbConnection().prepareStatement(createQuery);
 			preparedStatementCreate.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -82,7 +89,7 @@ public class DBConnector {
 		String insertQuery = "insert into " + dbName + " VALUES (?,?,?)";
 
 		try {
-			preparedStatementInsert = getConnection().prepareStatement(insertQuery);
+			preparedStatementInsert = getDbConnection().prepareStatement(insertQuery);
 			preparedStatementInsert.setLong(1, date);
 			preparedStatementInsert.setString(2, towerId);
 			preparedStatementInsert.setFloat(3, totalWeight);
@@ -107,7 +114,7 @@ public class DBConnector {
 				+ "BIRD_ID VARCHAR(250) NOT NULL" + ")";
 
 		try {
-			preparedStatement = getConnection().prepareStatement(createQuery);
+			preparedStatement = getDbConnection().prepareStatement(createQuery);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -117,7 +124,7 @@ public class DBConnector {
 		String insertQuery = "insert into " + dbName + " VALUES (?,?)";
 
 		try {
-			preparedStatement = getConnection().prepareStatement(insertQuery);
+			preparedStatement = getDbConnection().prepareStatement(insertQuery);
 			preparedStatement.setLong(1, lastSeen);
 			preparedStatement.setString(2, birdId);
 			preparedStatement.executeUpdate();

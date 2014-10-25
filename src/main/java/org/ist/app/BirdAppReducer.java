@@ -20,7 +20,7 @@ import java.util.TimeZone;
 public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
 
     private static Log log = LogFactory.getLog(BirdAppReducer.class);
-    private static DBConnector connector = new DBConnector();
+    private DBConnector connector = new DBConnector();
 
     /**
      *
@@ -43,6 +43,7 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
                         Text tempBigger = getBiggestSpan(biggerSpan, values.iterator().next());
                         biggerSpan.set(tempBigger);
                     }
+                    System.out.println("q3key : "+ key +" value: "+biggerSpan);
                     DateFormat q1Formatter = new SimpleDateFormat("yyyy-MM-dd");
                     TimeZone.setDefault(TimeZone.getTimeZone("WET"));
                     // use this when saving to db
