@@ -40,6 +40,7 @@ public class BirdAppMapper extends org.apache.hadoop.mapreduce.Mapper<LongWritab
      */
     public void map(LongWritable key, Text value, Context output) throws IOException, InterruptedException {
 
+        System.out.println("............ mapper ............");
         String[] logSplitValues = value.toString().split(",");
         // trim the elements
         for (int i = 0; i < logSplitValues.length; i++) {
@@ -56,6 +57,7 @@ public class BirdAppMapper extends org.apache.hadoop.mapreduce.Mapper<LongWritab
                 String outputValue = logSplitValues[0] + ":" + logSplitValues[5]; // add towerID and span
                 dateKey.set("1" + logSplitValues[1]);
                 wingSpanTowerIdCompositeVal.set(outputValue);
+                System.out.println("Q1: map key:" + dateKey.toString() + " *val:" + wingSpanTowerIdCompositeVal.toString());
                 output.write(dateKey, wingSpanTowerIdCompositeVal);
             }
 
@@ -63,13 +65,14 @@ public class BirdAppMapper extends org.apache.hadoop.mapreduce.Mapper<LongWritab
 
             String dateTidCombined = (logSplitValues[1]).concat(Utils.KEY_SEPERATOR).concat(logSplitValues[0]);
             dateTowerIdCompositeKey.set("2"+ dateTidCombined);
-            
             birdWeight.set(logSplitValues[4]);
+            System.out.println("Q2: map key:"+dateTowerIdCompositeKey.toString()+ " *val:" +birdWeight.toString());
             output.write(dateTowerIdCompositeKey, birdWeight);
 
             //Q3:
             birdIdKey.set("3" + logSplitValues[3]);
             timeStamp.set(logSplitValues[1] + " " + logSplitValues[2]);
+            System.out.println("Q3: map key:"+birdIdKey.toString() + " *val"+timeStamp.toString());
             output.write(birdIdKey,timeStamp);
 
 

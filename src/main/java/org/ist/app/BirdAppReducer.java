@@ -35,6 +35,8 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
 
         try {
             int keyPrefix = Integer.valueOf(key.toString().substring(0,1));
+            key = new Text(key.toString().substring(1));
+            System.out.println("Reducer prefix:"+keyPrefix + " ,key:" + key.toString());
             switch (keyPrefix) {
                 case 1:
                     // key - date , value - towerID:span
@@ -43,7 +45,6 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
                         Text tempBigger = getBiggestSpan(biggerSpan, values.iterator().next());
                         biggerSpan.set(tempBigger);
                     }
-                    System.out.println("q3key : "+ key +" value: "+biggerSpan);
                     DateFormat q1Formatter = new SimpleDateFormat("yyyy-MM-dd");
                     TimeZone.setDefault(TimeZone.getTimeZone("WET"));
                     // use this when saving to db
@@ -52,12 +53,14 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
                     String value = biggerSpan.toString();
                     String towerID = value.substring(0,value.lastIndexOf(":"));
                     String span = value.substring(value.lastIndexOf(":")+1);
-                    connector.executeQueryForQ1(dateQ1, towerID, Double.valueOf(span) );
+                    connector.executeQueryForQ1(dateQ1, towerID, Double.valueOf(span));
                     context.write(key,biggerSpan);
                     break;
 
                 case 2:
-                    String[] keyStrings=key.toString().substring(0,key.toString().length()).split(Utils.KEY_SEPERATOR);
+                    //TODO line 1 note needed
+                    key = new Text(String.valueOf(keyPrefix) + key);
+                    String[] keyStrings=key.toString().split(Utils.KEY_SEPERATOR);
                     Text sumWeight = new Text();
                     float sum = 0;
                     DateFormat q2Formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -65,7 +68,6 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
                     // use this when saving to db
                     long dateQ2 = q2Formatter.parse(String.valueOf(keyStrings[0])).getTime();
                     String towerId = keyStrings[1];
-                    key = new Text(keyStrings[0] + ":" + keyStrings[1]);
                     for (Text valueQ2 : values) {
                         sum += Float.parseFloat(valueQ2.toString());
                     }
