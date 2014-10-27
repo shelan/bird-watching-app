@@ -63,8 +63,8 @@ public class BirdAppMapper extends org.apache.hadoop.mapreduce.Mapper<LongWritab
 
             //Q2: for Given a date and a tower-id print the total added estimated weight of all the birds seen by a tower.
 
-            String dateTidCombined = (logSplitValues[1]).concat(Utils.KEY_SEPERATOR).concat(logSplitValues[0]);
-            dateTowerIdCompositeKey.set("2"+ dateTidCombined);
+            //String dateTidCombined = (logSplitValues[1]).concat(Utils.KEY_SEPERATOR).concat(logSplitValues[0]);
+            dateTowerIdCompositeKey.set("2"+ logSplitValues[1] + ":" + logSplitValues[0]);
             birdWeight.set(logSplitValues[4]);
             System.out.println("Q2: map key:"+dateTowerIdCompositeKey.toString()+ " *val:" +birdWeight.toString());
             output.write(dateTowerIdCompositeKey, birdWeight);

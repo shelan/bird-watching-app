@@ -46,7 +46,7 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
                         biggerSpan.set(tempBigger);
                     }
                     DateFormat q1Formatter = new SimpleDateFormat("yyyy-MM-dd");
-                    TimeZone.setDefault(TimeZone.getTimeZone("WET"));
+                    TimeZone.setDefault(TimeZone.getTimeZone("WEST"));
                     // use this when saving to db
                     long dateQ1 = q1Formatter.parse(String.valueOf(key.toString())).getTime();
 
@@ -57,29 +57,9 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
                     context.write(key,biggerSpan);
                     break;
 
-                case 2:
-                    //TODO line 1 note needed
-                    key = new Text(String.valueOf(keyPrefix) + key);
-                    String[] keyStrings=key.toString().split(Utils.KEY_SEPERATOR);
-                    Text sumWeight = new Text();
-                    float sum = 0;
-                    DateFormat q2Formatter = new SimpleDateFormat("yyyy-MM-dd");
-                    TimeZone.setDefault(TimeZone.getTimeZone("WET"));
-                    // use this when saving to db
-                    long dateQ2 = q2Formatter.parse(String.valueOf(keyStrings[0])).getTime();
-                    String towerId = keyStrings[1];
-                    for (Text valueQ2 : values) {
-                        sum += Float.parseFloat(valueQ2.toString());
-                    }
-                    //here we have to save the date|tower_id|sum weight to the database
-                    connector.executeQueryForQ2(dateQ2, towerId, sum);
-                    sumWeight.set(String.valueOf(sum));
-                    context.write(key, sumWeight);
-                    break;
-
                 case 3:
                     DateFormat q3Formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    TimeZone.setDefault(TimeZone.getTimeZone("WET"));
+                    TimeZone.setDefault(TimeZone.getTimeZone("WEST"));
                     Text lastSeenDateString = new Text();
                     //initialized to epoc time
                     long lastSeenDate = 0L;
@@ -97,6 +77,27 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
                     connector.executeQueryForQ3(key.toString(), lastSeenDate);
                     context.write(key,lastSeenDateString);
                     break;
+
+                default:
+                    //TODO line 1 not needed
+                    key = new Text(String.valueOf(keyPrefix) + key);
+                    String[] keyStrings=key.toString().split(Utils.KEY_SEPERATOR);
+                    Text sumWeight = new Text();
+                    float sum = 0;
+                    DateFormat q2Formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    TimeZone.setDefault(TimeZone.getTimeZone("WEST"));
+                    // use this when saving to db
+                    long dateQ2 = q2Formatter.parse(String.valueOf(keyStrings[0])).getTime();
+                    String towerId = keyStrings[1];
+                    for (Text valueQ2 : values) {
+                        sum += Float.parseFloat(valueQ2.toString());
+                    }
+                    //here we have to save the date|tower_id|sum weight to the database
+                    connector.executeQueryForQ2(dateQ2, towerId, sum);
+                    sumWeight.set(String.valueOf(sum));
+                    context.write(key, sumWeight);
+                    break;
+
             }
         } catch (NumberFormatException e) {
             log.error(e.getMessage(), e);
