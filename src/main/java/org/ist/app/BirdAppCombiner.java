@@ -49,7 +49,7 @@ public class BirdAppCombiner extends Reducer<Text, Text, Text, Text> {
                     Text sumWeight = new Text();
                     float sum = 0;
                     DateFormat q2Formatter = new SimpleDateFormat("yyyy-MM-dd");
-                    TimeZone.setDefault(TimeZone.getTimeZone("WET"));
+                    TimeZone.setDefault(TimeZone.getTimeZone("WEST"));
                     // use this when saving to db
                     /* Date date = q2Formatter.parse(String.valueOf(keyStrings[0]));
                     String towerId = keyStrings[1]; */
@@ -63,8 +63,14 @@ public class BirdAppCombiner extends Reducer<Text, Text, Text, Text> {
                     break;
 
                 case 3:
+
+                    String originalKey = key.toString().substring(1,key.toString().length());
+                    if("-1".equals(originalKey) || "0".equals(originalKey)){
+                        //we will break here because we do not track untag birds or weather monitoring
+                        break;
+                    }
                     DateFormat q3Formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    TimeZone.setDefault(TimeZone.getTimeZone("WET"));
+                    TimeZone.setDefault(TimeZone.getTimeZone("WEST"));
                     Text lastSeenDateString = new Text();
                     //initialized to epoc time
                     long lastSeenDate = 0L;
