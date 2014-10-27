@@ -14,12 +14,8 @@
 
     <link href="css/modern-bootstrap.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-    <link href="css/datepicker.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-    <script src="js/html5shiv.js"></script>
-    <![endif]-->
+    <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="css/bootstrap-table.css" rel="stylesheet">
 
     <!-- Fav and touch icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/apple-touch-icon-144-precomposed.png">
@@ -28,10 +24,19 @@
     <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-57-precomposed.png">
     <link rel="shortcut icon" href="img/favicon.png">
 
-    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/scripts.js"></script>
-    <script type="text/javascript" src="js/less-1.3.3.min.js"></script>
+  <!--  <script type="text/javascript" src="js/less-1.3.3.min.js"></script>-->
+
+    <script type="text/javascript" src="js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="js/bootstrap-table.js"></script>
+
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <![endif]-->
+
 </head>
 
 <body>
@@ -73,14 +78,25 @@
                     <div id="collapseOne" class="panel-collapse collapse in">
                         <div class="panel-body">
 
-                            <div class="jumbotron">
-                                <h1>Hello, Good Morning !</h1>
+                            <div class="form-group">
+                                <div id ='datetimefield'class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy mm dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                    <input class="form-control" size="16" type="text" value="" readonly>
+<!--
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+-->
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                                <!--<input type="hidden" id="dtp_input2" value="" /><br/>-->
 
-                                <h3> who flew in rain ?</h3>
 
-                                <p><a href="#" class="btn btn-success btn-lg"><span
-                                        class="glyphicon glyphicon-search"></span> Click to see</a>
-                                </p>
+                                <table id="tableq1" data-toggle="table" data-cache="false" data-height="150">
+                                    <thead>
+                                    <tr>
+                                        <th data-field="TOWER_ID">Tower</th>
+                                        <th data-field="WING_SPAN">Bird Id</th>
+                                    </tr>
+                                    </thead>
+                                </table>
                             </div>
 
                         </div>
@@ -131,4 +147,69 @@
     </div>
 </div>
 </body>
+<script type="text/javascript">
+
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    }).on('changeDate', function(ev){
+        $('#mytable').bootstrapTable({
+            url: 'data.json'
+        });
+    });
+
+    $('.form_date').datetimepicker({
+        language:  'en',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    }).on('changeDate', function(ev){
+        var date = new Date(ev.date.getFullYear() + '-' + ("0" + (ev.date.getMonth() + 1)).slice(-2) +'-'+
+        ("0" + ev.date.getDate()).slice(-2) );
+
+/*
+$.get( searchUrl, function( data ) {
+  alert( "Data Loaded: " + data );
+});
+*/
+
+var searchUrl = 'api/q1/' + date.getTime();
+
+
+   $('#tableq1').bootstrapTable('refresh',{
+            url: searchUrl
+        });
+
+
+
+            });
+
+
+    $('.form_time').datetimepicker({
+        language:  'en',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 1,
+        minView: 0,
+        maxView: 1,
+        forceParse: 0
+    });
+
+
+
+</script>
+
 </html>
+
