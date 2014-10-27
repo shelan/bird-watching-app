@@ -42,6 +42,8 @@ public class DBConnector {
 		PreparedStatement preparedStatement = null;
 		String createQuery = "CREATE TABLE IF NOT EXISTS " + dbName + "(DATE LONG NOT NULL, "
 				+ "TOWER_ID VARCHAR(255) NOT NULL, " + "WING_SPAN BIGINT NOT NULL" + ")";
+        /*String createQuery = "CREATE TABLE IF NOT EXISTS " + dbName + "(DATE DATE NOT NULL, "
+				+ "TOWER_ID VARCHAR(255) NOT NULL, " + "WING_SPAN BIGINT NOT NULL" + ")";*/
 
 		try {
 			preparedStatement = getDbConnection().prepareStatement(createQuery);
@@ -56,6 +58,7 @@ public class DBConnector {
 		try {
 			preparedStatement = getDbConnection().prepareStatement(insertQuery);
 			preparedStatement.setLong(1, date);
+			//preparedStatement.setDate(1, new Date(date));
 			preparedStatement.setString(2, towerId);
 			preparedStatement.setDouble(3, wingSpan);
 			preparedStatement.executeUpdate();

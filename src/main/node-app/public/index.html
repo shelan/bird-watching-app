@@ -71,15 +71,20 @@
                     <div class="panel-heading">
                         <h2 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span
-                                    class="glyphicon glyphicon-question-sign"></span>Who flew in Rain ? </a>
+                                    class="glyphicon glyphicon-question-sign"></span> Who flew in Rain ? </a>
 
                         </h2>
                     </div>
                     <div id="collapseOne" class="panel-collapse collapse in">
                         <div class="panel-body">
+                            <div class="col-lg-6">
+                            <div>
 
+                                <span class="label label-info"> Select a date to view tower </span>
+                            </div>
+                            </br>
                             <div class="form-group">
-                                <div id='datetimefield' class="input-group date form_date col-md-5" data-date="Click on Calender"
+                                <div id='datetimefield' class="input-group date form_date_q1 col-md-5" data-date=""
                                      data-date-format="yyyy mm dd" data-link-field="dtp_input2"
                                      data-link-format="yyyy-mm-dd">
                                     <input class="form-control" size="16" type="text" value="" readonly>
@@ -91,8 +96,8 @@
                                 </div>
                                 <!--<input type="hidden" id="dtp_input2" value="" /><br/>-->
 
-
-                                <table id="tableq1" data-toggle="table" data-cache="false" data-height="150">
+                                <br>
+                                <table id="tableq1"  data-toggle="table" data-cache="false" data-height="78">
                                     <thead>
                                     <tr>
                                         <th data-field="TOWER_ID">Tower</th>
@@ -101,7 +106,7 @@
                                     </thead>
                                 </table>
                             </div>
-
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -109,21 +114,49 @@
                     <div class="panel-heading">
                         <h2 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><span
-                                    class="glyphicon glyphicon-question-sign"></span> Who are missing birds ?</a>
+                                    class="glyphicon glyphicon-question-sign"></span> Total Weight of Birds for Tower ? </a>
                         </h2>
                     </div>
                     <div id="collapseTwo" class="panel-collapse collapse">
                         <div class="panel-body">
+                            <div class="col-lg-6">
+                            <div>
+                                <span class="label label-info"> Type a tower Id </span>
+                            </div>
+                                <br>
+                                <div  class="input-group">
+                                    <input id="toweridinput" type="text" class="form-control">
+                                    <span class="input-group-addon"></span>
+                                </div>
+                                <br>
+                                <div>
+                                    <span class="label label-info"> Select a date to view tower </span>
+                                </div>
 
+                                </br>
+                            <div class="form-group">
+                                <div id='datetimefield2' class="input-group date form_date_q2 col-md-5" data-date=""
+                                     data-date-format="yyyy mm dd" data-link-field="dtp_input2"
+                                     data-link-format="yyyy-mm-dd">
+                                    <input class="form-control" size="16" type="text" value="" readonly>
+                                    <!--
+                                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    -->
+                                    <span class="input-group-addon"><span
+                                            class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                                <!--<input type="hidden" id="dtp_input2" value="" /><br/>-->
+                                <br>
+                                <table id="tableq2"  data-toggle="table" data-cache="false" data-height="78">
+                                    <thead>
+                                    <tr>
+                                        <th data-field="TOWER_ID">Tower</th>
+                                        <th data-field="TOTAL_WEIGHT">Total Weight</th>
+                                    </tr>
+                                    </thead>
+                                </table>
 
-                            <div id="dp3" class="input-append date" data-date-format="dd-mm-yyyy"
-                                 data-date="12-02-2012">
-
-                                <input class="span2" type="text" readonly="" value="12-02-2012" size="16"></input>
-                                <span class="add-on">
-                                     <i class="icon-calendar"></i>
-                                </span>
-
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -132,12 +165,21 @@
                     <div class="panel-heading">
                         <h2 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"><span
-                                    class="glyphicon glyphicon-question-sign"></span> Birds seen by a
-                                Tower ?</a>
+                                    class="glyphicon glyphicon-question-sign"></span> Birds Missing for Last Week ?</a>
                         </h2>
                     </div>
                     <div id="collapseThree" class="panel-collapse collapse">
                         <div class="panel-body">
+
+                            <table id="tableq3" data-url="api/q3"  data-toggle="table" data-cache="false" data-height="300">
+                                <thead>
+                                <tr>
+                                    <th data-field="BIRD_ID">Bird Id</th>
+                                    <th data-field="LAST_SEEN">Last Seen</th>
+                                </tr>
+                                </thead>
+                            </table>
+
 
                         </div>
                     </div>
@@ -151,22 +193,7 @@
 <!--Q1 answer area-->
 <script type="text/javascript">
 
-    $('.form_datetime').datetimepicker({
-        //language:  'fr',
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        forceParse: 0,
-        showMeridian: 1
-    }).on('changeDate', function (ev) {
-        $('#mytable').bootstrapTable({
-            url: 'data.json'
-        });
-    });
-
-    $('.form_date').datetimepicker({
+    $('.form_date_q1').datetimepicker({
         language: 'en',
         weekStart: 1,
         todayBtn: 1,
@@ -186,16 +213,30 @@
         });
     });
 
-    $('.form_time').datetimepicker({
+    $('.form_date_q2').datetimepicker({
         language: 'en',
         weekStart: 1,
         todayBtn: 1,
         autoclose: 1,
         todayHighlight: 1,
-        startView: 1,
-        minView: 0,
-        maxView: 1,
+        startView: 2,
+        minView: 2,
         forceParse: 0
+    }).on('changeDate', function (ev) {
+        var towerId;
+        if ($('#toweridinput').val()) {
+            towerId = $('#toweridinput').val();
+        } else {
+            alert("No tower Id")
+        }
+        var date = new Date(ev.date.getFullYear() + '-' + ("0" + (ev.date.getMonth() + 1)).slice(-2) + '-' +
+                ("0" + ev.date.getDate()).slice(-2));
+
+        var searchUrl = 'api/q2/' + date.getTime() +'/'+towerId;
+
+        $('#tableq2').bootstrapTable('refresh', {
+            url: searchUrl
+        });
     });
 
     /*
