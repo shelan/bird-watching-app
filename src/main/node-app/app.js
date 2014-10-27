@@ -72,7 +72,7 @@ var Q2 = sequelize.define('Q2Table', {
 
 var Q3 = sequelize.define('Q3Table', {
     LAST_SEEN: DataTypes.STRING,
-    BIRD_ID: DataTypes.INTEGER,
+    BIRD_ID: DataTypes.INTEGER
   }, {
     instanceMethods: {
       retrieveAll: function(onSuccess, onError) {
@@ -118,7 +118,7 @@ router.route('/q2/:date/:tower_id')
 
 // get all the users (accessed at GET http://localhost:8080/birds)
 .get(function(req, res) {
-    
+
 sequelize
   .query(
     'SELECT * FROM Q2Table WHERE TOWER_ID = :tower_id AND DATE= :date ', null,
@@ -136,18 +136,20 @@ router.route('/q3')
 
 // get all the users (accessed at GET http://localhost:8080/birds)
 .get(function(req, res) {
-    var bird = Q3.build();
-    
-    bird.retrieveAll(function(birds) {
-        if (birds) {                
-          res.json(birds);
-        } else {
-          res.send(401, "bird not found");
-        }
-      }, function(error) {
-        res.send("bird not found");
-      });
-});
+
+        var today = new Date();
+        var lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+
+        sequelize
+            .query(
+            'SELECT * FROM Q3Table WHERE LAST_SEEN > '+ lastWeek.getTime() + ' AND BIRD_ID > -1', null,
+            { raw: true }, { }
+        )
+            .success(function(birds) {
+                res.send(birds);
+            })
+
+    });
 
 
 
