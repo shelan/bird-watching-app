@@ -35,15 +35,13 @@ public class DBConnector {
     }
 
 	// date expect an java.sql.Date object
-	public QueryStatus executeQueryForQ1(long date, String towerId, double wingSpan) {
+	public QueryStatus executeQueryForQ1(long date, String towerId, int wingSpan) {
 		// Check whether database exist/ If not create and insert. If exist only
 		// insert
 		String dbName = "Q1Table";// IF NOT EXISTS
 		PreparedStatement preparedStatement = null;
 		String createQuery = "CREATE TABLE IF NOT EXISTS " + dbName + "(DATE LONG NOT NULL, "
-				+ "TOWER_ID VARCHAR(255) NOT NULL, " + "WING_SPAN BIGINT NOT NULL" + ")";
-        /*String createQuery = "CREATE TABLE IF NOT EXISTS " + dbName + "(DATE DATE NOT NULL, "
-				+ "TOWER_ID VARCHAR(255) NOT NULL, " + "WING_SPAN BIGINT NOT NULL" + ")";*/
+				+ "TOWER_ID VARCHAR(255) NOT NULL, " + "WING_SPAN INTEGER NOT NULL" + ")";
 
 		try {
 			preparedStatement = getDbConnection().prepareStatement(createQuery);
@@ -58,9 +56,8 @@ public class DBConnector {
 		try {
 			preparedStatement = getDbConnection().prepareStatement(insertQuery);
 			preparedStatement.setLong(1, date);
-			//preparedStatement.setDate(1, new Date(date));
 			preparedStatement.setString(2, towerId);
-			preparedStatement.setDouble(3, wingSpan);
+			preparedStatement.setInt(3, wingSpan);
 			preparedStatement.executeUpdate();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -72,14 +69,14 @@ public class DBConnector {
 		return QueryStatus.SUCCESS;
 	}
 
-	public QueryStatus executeQueryForQ2(long date, String towerId, float totalWeight) {
+	public QueryStatus executeQueryForQ2(long date, String towerId, int totalWeight) {
 		// Check whether database exist/ If not create and insert. If exist only
 		// insert
 		String dbName = "Q2Table";// IF NOT EXISTS
 		PreparedStatement preparedStatementCreate = null;
 		PreparedStatement preparedStatementInsert = null;
 		String createQuery = "CREATE TABLE IF NOT EXISTS " + dbName + "(DATE LONG NOT NULL, "
-				+ "TOWER_ID VARCHAR(255) NOT NULL, " + "TOTAL_WEIGHT FLOAT NOT NULL" + ")";
+				+ "TOWER_ID VARCHAR(255) NOT NULL, " + "TOTAL_WEIGHT INTEGER NOT NULL" + ")";
 
 		try {
 			preparedStatementCreate = getDbConnection().prepareStatement(createQuery);
@@ -95,7 +92,7 @@ public class DBConnector {
 			preparedStatementInsert = getDbConnection().prepareStatement(insertQuery);
 			preparedStatementInsert.setLong(1, date);
 			preparedStatementInsert.setString(2, towerId);
-			preparedStatementInsert.setFloat(3, totalWeight);
+			preparedStatementInsert.setInt(3, totalWeight);
 			preparedStatementInsert.executeUpdate();
 		} catch (Exception ex) {
 			ex.printStackTrace();

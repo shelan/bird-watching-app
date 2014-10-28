@@ -53,8 +53,26 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
                     String value = biggerSpan.toString();
                     String towerID = value.substring(0,value.lastIndexOf(":"));
                     String span = value.substring(value.lastIndexOf(":")+1);
-                    connector.executeQueryForQ1(dateQ1, towerID, Double.valueOf(span));
+                    connector.executeQueryForQ1(dateQ1, towerID, Integer.valueOf(span));
                     context.write(key,biggerSpan);
+                    break;
+
+                case 2:
+                    String[] keyStrings=key.toString().split(Utils.KEY_SEPERATOR);
+                    Text sumWeight = new Text();
+                    int sum = 0;
+                    DateFormat q2Formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    TimeZone.setDefault(TimeZone.getTimeZone("WEST"));
+                    // use this when saving to db
+                    long dateQ2 = q2Formatter.parse(String.valueOf(keyStrings[0])).getTime();
+                    String towerId = keyStrings[1];
+                    for (Text valueQ2 : values) {
+                        sum += Integer.valueOf(valueQ2.toString());
+                    }
+                    //here we have to save the date|tower_id|sum weight to the database
+                    connector.executeQueryForQ2(dateQ2, towerId, sum);
+                    sumWeight.set(String.valueOf(sum));
+                    context.write(key, sumWeight);
                     break;
 
                 case 3:
@@ -76,26 +94,6 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
                     lastSeenDateString.set(q3Formatter.format(new Date(lastSeenDate)));
                     connector.executeQueryForQ3(key.toString(), lastSeenDate);
                     context.write(key,lastSeenDateString);
-                    break;
-
-                default:
-                    //TODO line 1 not needed
-                    key = new Text(String.valueOf(keyPrefix) + key);
-                    String[] keyStrings=key.toString().split(Utils.KEY_SEPERATOR);
-                    Text sumWeight = new Text();
-                    float sum = 0;
-                    DateFormat q2Formatter = new SimpleDateFormat("yyyy-MM-dd");
-                    TimeZone.setDefault(TimeZone.getTimeZone("WEST"));
-                    // use this when saving to db
-                    long dateQ2 = q2Formatter.parse(String.valueOf(keyStrings[0])).getTime();
-                    String towerId = keyStrings[1];
-                    for (Text valueQ2 : values) {
-                        sum += Float.parseFloat(valueQ2.toString());
-                    }
-                    //here we have to save the date|tower_id|sum weight to the database
-                    connector.executeQueryForQ2(dateQ2, towerId, sum);
-                    sumWeight.set(String.valueOf(sum));
-                    context.write(key, sumWeight);
                     break;
 
             }
