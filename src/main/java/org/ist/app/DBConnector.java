@@ -1,31 +1,68 @@
 package org.ist.app;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ist.QueryStatus;
+
+import java.io.*;
 import java.sql.*;
+import java.util.Properties;
 
 public class DBConnector {
+
+    private static Log log = LogFactory.getLog(DBConnector.class);
+
     //Make sure to create the db in mysql before runing this. But u don't need to create tables
-	static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/BirdWatchingDB"; 
-	static final String USER = "root";
-	static final String PASS = "";
+	static String dbUrl;
+	static String userName;
+	static String password;
     private Connection dbConnection = null;
+    private Properties dbConnectionInfo = new Properties();
 
 
-    public DBConnector(){
-        createConnection();
+    public DBConnector() {
+        try {
+            readDbInfo();
+            createConnection();
+        } catch (IOException e) {
+            log.fatal("Could not create DB connection. "+e);
+        }
+
     }
 
 	public Connection getDbConnection(){
         return dbConnection;
     }
 
+    private void readDbInfo() throws IOException {
+        InputStream input = null;
+        try {
+            File file = new File("src/main/resources/db.properties");
+            input = new FileInputStream(file);
+
+            // load a properties file
+            dbConnectionInfo.load(input);
+
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
     private boolean createConnection(){
         try {
             // STEP 2: Register JDBC driver
             Class.forName("com.mysql.jdbc.Driver");
+            dbUrl = "jdbc:mysql://" + dbConnectionInfo.getProperty("host") + ":3306/" + dbConnectionInfo.getProperty("dbname");
+            userName = dbConnectionInfo.getProperty("dbuser");
+            password = dbConnectionInfo.getProperty("userPassword");
             // STEP 3: Open a connection
             System.out.println("Connecting to a selected database...");
-            dbConnection = DriverManager.getConnection(DB_URL, USER, PASS);
+            dbConnection = DriverManager.getConnection(dbUrl, userName, password);
             System.out.println("Connected database successfully...");
         } catch (Exception ex) {
             System.out.println("error while establishing the connection");
