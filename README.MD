@@ -1,12 +1,12 @@
 Pre-requisites:
-    mysql installed
-    nodejs (http://nodejs.org/download/)
+    * mysql installed
+    * nodejs (http://nodejs.org/download/)
 
 Build the Application:
    * Navigate to the project folder and execute
 	    "mvn clean install"
-   * Navigate in to node-app (bird-watching-app/src/main/node-app) and execute npm install to install 
-	nodejs dependencies
+   * Navigate in to node-app (bird-watching-app/src/main/node-app) and execute "npm install"
+    to install nodejs dependencies
 
 To run Map Reduce  Application:
 
@@ -24,5 +24,5 @@ To run Map Reduce  Application:
 
 To run NodeJs application
 
-    * Navigate in to node-app (bird-watching-app/src/main/node-app) and execute node app.js
+    * Navigate in to node-app (bird-watching-app/src/main/node-app) and execute "node app.js"
     * you can view application at http://localhost:8080/index.html
