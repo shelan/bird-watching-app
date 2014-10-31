@@ -36,7 +36,7 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
         try {
             int keyPrefix = Integer.valueOf(key.toString().substring(0,1));
             key = new Text(key.toString().substring(1));
-            System.out.println("Reducer prefix:"+keyPrefix + " ,key:" + key.toString());
+            //System.out.println("Reducer prefix:"+keyPrefix + " ,key:" + key.toString());
             switch (keyPrefix) {
                 case 1:
                     // key - date , value - towerID:span
@@ -81,11 +81,11 @@ public class BirdAppReducer extends Reducer<Text, Text, Text, Text> {
                     Text lastSeenDateString = new Text();
                     //initialized to epoc time
                     long lastSeenDate = 0L;
-                    System.out.println("token of :"+key);
+                    //System.out.println("token of :"+key);
                     for (Text valueQ3 : values) {
-                            System.out.println("last seen date"+lastSeenDate);
+                            //System.out.println("last seen date"+lastSeenDate);
                             long newTime = q3Formatter.parse(String.valueOf(valueQ3)).getTime();
-                            System.out.println("formatted date"+newTime+"\n");
+                            //System.out.println("formatted date"+newTime+"\n");
 
                             if(lastSeenDate < newTime){
                                 lastSeenDate = newTime;
