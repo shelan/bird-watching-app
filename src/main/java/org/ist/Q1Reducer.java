@@ -18,7 +18,7 @@ public class Q1Reducer extends Reducer<Text, Text, Text, Text>{
 
         //Q1
         //initializing a text with 0 span
-        Text biggerSpan = new Text("testElement-0");
+        Text biggerSpan = new Text("testElement:0");
         while (values.iterator().hasNext()){
             Text tempBigger = getBiggestSpan(biggerSpan, values.iterator().next());
             biggerSpan.set(tempBigger);
@@ -31,9 +31,9 @@ public class Q1Reducer extends Reducer<Text, Text, Text, Text>{
     private Text getBiggestSpan(Text value1, Text value2) {
         String s1 = value1.toString(); // <towerID-span> ie : Sintra1-20
         String s2 = value2.toString();
-       // System.out.print(s1 + " " + s2);
-        return Integer.valueOf(s1.substring(s1.lastIndexOf("-")+1)) >
-                Integer.valueOf(s2.substring(s2.lastIndexOf("-")+1))?
+
+        return Integer.valueOf(s1.substring(s1.lastIndexOf(":")+1)) >
+                Integer.valueOf(s2.substring(s2.lastIndexOf(":")+1))?
                 value1 : value2;
     }
 }

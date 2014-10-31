@@ -6,6 +6,7 @@ package org.ist;
  *
  */
 
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mrunit.mapreduce.MapDriver;
 import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
@@ -36,9 +37,9 @@ public class MapReduceTestQ1 {
 
     @Test
     public void testMapper() throws IOException {
-        mapDriver.withInput(new Text(),new Text(INPUT_LOG_ENTRY));
+        mapDriver.withInput(new LongWritable(),new Text(INPUT_LOG_ENTRY));
 
-        String expectedResult = "Sintra-1-120";
+        String expectedResult = "Sintra-1:120";
         mapDriver.withOutput(new Text("2013-10-09"), new Text(expectedResult));
         mapDriver.runTest();
     }
@@ -46,16 +47,16 @@ public class MapReduceTestQ1 {
     @Test
     public void testReducer() throws IOException {
         ArrayList<Text> listofValues = new ArrayList<Text>();
-        listofValues.add(new Text("tower1-07"));
-        listofValues.add(new Text("tower2-18"));
-        listofValues.add(new Text("tower3-15"));
-        listofValues.add(new Text("tower5-329"));
-        listofValues.add(new Text("tower3-15"));
-        listofValues.add(new Text("tower2-183"));
-        listofValues.add(new Text("tower3-1"));
+        listofValues.add(new Text("tower1:07"));
+        listofValues.add(new Text("tower2:18"));
+        listofValues.add(new Text("tower3:15"));
+        listofValues.add(new Text("tower5:329"));
+        listofValues.add(new Text("tower3:15"));
+        listofValues.add(new Text("tower2:183"));
+        listofValues.add(new Text("tower3:1"));
 
         reduceDriver.withInput(new Text("2013-10-09"),listofValues);
-        reduceDriver.withOutput(new Text("2013-10-09"),new Text("tower5-329"));
+        reduceDriver.withOutput(new Text("2013-10-09"),new Text("tower5:329"));
 
         reduceDriver.runTest();
     }
@@ -63,16 +64,16 @@ public class MapReduceTestQ1 {
     @Test
     public void testCombiner() throws IOException {
         ArrayList<Text> listofValues = new ArrayList<Text>();
-        listofValues.add(new Text("tower1-507"));
-        listofValues.add(new Text("tower2-18"));
-        listofValues.add(new Text("tower3-15"));
-        listofValues.add(new Text("tower5-329"));
-        listofValues.add(new Text("tower3-15"));
-        listofValues.add(new Text("tower2-183"));
-        listofValues.add(new Text("tower3-1"));
+        listofValues.add(new Text("tower1:507"));
+        listofValues.add(new Text("tower2:18"));
+        listofValues.add(new Text("tower3:15"));
+        listofValues.add(new Text("tower5:329"));
+        listofValues.add(new Text("tower3:15"));
+        listofValues.add(new Text("tower2:183"));
+        listofValues.add(new Text("tower3:1"));
 
         combinerDriver.withInput(new Text("2013-10-09"),listofValues);
-        combinerDriver.withOutput(new Text("2013-10-09"),new Text("tower1-507"));
+        combinerDriver.withOutput(new Text("2013-10-09"),new Text("tower1:507"));
 
         combinerDriver.runTest();
     }

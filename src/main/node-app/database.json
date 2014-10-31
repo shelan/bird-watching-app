@@ -1,0 +1,14 @@
+{
+  "dev": {
+    "driver": "mysql",
+    "user": "root",
+    "database": "BirdWatchingDB",
+	"password": ""
+  },
+ 
+  "production": {
+    "driver": "mysql",
+    "user": "root",
+    "database": "BirdWatchingDB"
+  }
+}
