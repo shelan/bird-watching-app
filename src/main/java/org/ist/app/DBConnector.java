@@ -37,9 +37,7 @@ public class DBConnector {
     private void readDbInfo() throws IOException {
         InputStream input = null;
         try {
-            File file = new File("src/main/resources/db.properties");
-            input = new FileInputStream(file);
-
+            input = getClass().getResourceAsStream("/db.properties");
             // load a properties file
             dbConnectionInfo.load(input);
 

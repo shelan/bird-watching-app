@@ -10,19 +10,19 @@ Build the Application:
 
 To run Map Reduce  Application:
 
-    Update the src/main/resources/db.properties file with required information
+    * Update the src/main/resources/db.properties file with required information
     
-    You can use project-1.0-SNAPSHOT-jar-with-dependencies.jar created with the following commands to run the application
+    * You can use project-1.0-SNAPSHOT-jar-with-dependencies.jar created with the following commands to run the application
     Standalone mode:
         hadoop jar <path to jar file> org.ist.app.BirdAppRunner <input file> <path to output file>
 
-    pseudo distributed mode:
+    * pseudo distributed mode:
         Copy the input file to dfs
             hdfs dfs –put <local path> <dfs path for input>
         Run
             hadoop jar <path to jar file> org.ist.app.BirdAppRunner <input file in dfs> <output file location>
 
 To run NodeJs application
-
+    * Update the required information in database.json in node app
     * Navigate in to node-app (bird-watching-app/src/main/node-app) and execute "node app.js"
     * you can view application at http://localhost:8080/index.html
