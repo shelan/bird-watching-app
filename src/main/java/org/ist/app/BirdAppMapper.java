@@ -70,11 +70,12 @@ public class BirdAppMapper extends org.apache.hadoop.mapreduce.Mapper<LongWritab
             output.write(dateTowerIdCompositeKey, birdWeight);
 
             //Q3:
-            birdIdKey.set("3" + logSplitValues[3]);
-            timeStamp.set(logSplitValues[1] + " " + logSplitValues[2]);
-            System.out.println("Q3: map key:"+birdIdKey.toString() + " *val"+timeStamp.toString());
-            output.write(birdIdKey,timeStamp);
-
+            if(!("0".equals(logSplitValues[3])) && !("-1".equals(logSplitValues[3]))){
+                birdIdKey.set("3" + logSplitValues[3]);
+                timeStamp.set(logSplitValues[1] + " " + logSplitValues[2]);
+                System.out.println("Q3: map key:"+birdIdKey.toString() + " *val"+timeStamp.toString());
+                output.write(birdIdKey,timeStamp);
+            }
 
         } catch (NumberFormatException e) {
             log.warn("Invalid input log, cannot process " + value.toString() + " " + e.getMessage());
