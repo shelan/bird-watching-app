@@ -4,7 +4,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.ist.Utils;
 
 import java.io.IOException;
 
@@ -40,13 +39,13 @@ public class BirdAppMapper extends org.apache.hadoop.mapreduce.Mapper<LongWritab
      */
     public void map(LongWritable key, Text value, Context output) throws IOException, InterruptedException {
 
-        System.out.println("............ mapper ............");
+        //System.out.println("............ mapper ............");
         String[] logSplitValues = value.toString().split(",");
         // trim the elements
         for (int i = 0; i < logSplitValues.length; i++) {
             logSplitValues[i] = logSplitValues[i].trim();
         }
-        if (!validateEntry(logSplitValues)) {
+        if (!isValidEntry(logSplitValues)) {
             return;
         }
 
@@ -57,7 +56,7 @@ public class BirdAppMapper extends org.apache.hadoop.mapreduce.Mapper<LongWritab
                 String outputValue = logSplitValues[0] + ":" + logSplitValues[5]; // add towerID and span
                 dateKey.set("1" + logSplitValues[1]);
                 wingSpanTowerIdCompositeVal.set(outputValue);
-                System.out.println("Q1: map key:" + dateKey.toString() + " *val:" + wingSpanTowerIdCompositeVal.toString());
+                //System.out.println("Q1: map key:" + dateKey.toString() + " *val:" + wingSpanTowerIdCompositeVal.toString());
                 output.write(dateKey, wingSpanTowerIdCompositeVal);
             }
 
@@ -66,15 +65,16 @@ public class BirdAppMapper extends org.apache.hadoop.mapreduce.Mapper<LongWritab
             //String dateTidCombined = (logSplitValues[1]).concat(Utils.KEY_SEPERATOR).concat(logSplitValues[0]);
             dateTowerIdCompositeKey.set("2"+ logSplitValues[1] + ":" + logSplitValues[0]);
             birdWeight.set(logSplitValues[4]);
-            System.out.println("Q2: map key:"+dateTowerIdCompositeKey.toString()+ " *val:" +birdWeight.toString());
+            //System.out.println("Q2: map key:"+dateTowerIdCompositeKey.toString()+ " *val:" +birdWeight.toString());
             output.write(dateTowerIdCompositeKey, birdWeight);
 
             //Q3:
-            birdIdKey.set("3" + logSplitValues[3]);
-            timeStamp.set(logSplitValues[1] + " " + logSplitValues[2]);
-            System.out.println("Q3: map key:"+birdIdKey.toString() + " *val"+timeStamp.toString());
-            output.write(birdIdKey,timeStamp);
-
+            if(!("0".equals(logSplitValues[3])) && !("-1".equals(logSplitValues[3]))){
+                birdIdKey.set("3" + logSplitValues[3]);
+                timeStamp.set(logSplitValues[1] + " " + logSplitValues[2]);
+                //System.out.println("Q3: map key:"+birdIdKey.toString() + " *val"+timeStamp.toString());
+                output.write(birdIdKey,timeStamp);
+            }
 
         } catch (NumberFormatException e) {
             log.warn("Invalid input log, cannot process " + value.toString() + " " + e.getMessage());
@@ -83,14 +83,16 @@ public class BirdAppMapper extends org.apache.hadoop.mapreduce.Mapper<LongWritab
 
     }
 
-    private boolean validateEntry(String[] values) {
-        if (values.length == 7) {
+    private boolean isValidEntry(String[] values) {
+
+        if(values.length != 7) {
+            return false;
+        } else {
             for (String value : values) {
                 if(value.isEmpty()){
                     return false;
                 }
             }
-            // if (!tokens[0].isEmpty() && !tokens[1].isEmpty() && !tokens[4].isEmpty() && Float.parseFloat(tokens[4]) != 0)
         }
         return true;
     }

@@ -61,11 +61,11 @@ public class BirdAppCombiner extends Reducer<Text, Text, Text, Text> {
                     Text lastSeenDateString = new Text();
                     //initialized to epoc time
                     long lastSeenDate = 0L;
-                    System.out.println("token of :"+key);
+                    //System.out.println("token of :"+key);
                     for (Text value : values) {
-                        System.out.println("last seen date"+lastSeenDate);
+                        //System.out.println("last seen date"+lastSeenDate);
                         Date newDate = q3Formatter.parse(String.valueOf(value));
-                        System.out.println("formatted date"+newDate.toString()+"\n");
+                        //System.out.println("formatted date"+newDate.toString()+"\n");
                         long newTime = newDate.getTime();
 
                         if(lastSeenDate < newTime){
