@@ -1,9 +1,11 @@
 {
-  "dev": {
+"dev": {
     "driver": "mysql",
-    "user": "root",
+    "host": "",
+    "port": "3306",
+    "user": "appuser",
     "database": "BirdWatchingDB",
-	"password": ""
+    "password": "BirdWatching2014"
   },
  
   "production": {

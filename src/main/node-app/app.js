@@ -22,6 +22,8 @@ var sequelize = new Sequelize(
     config.user,
     config.password,
     {
+        host: config.host,
+        port: config.port,
         logging: console.log,
         define: {
             timestamps: false,
@@ -142,7 +144,7 @@ router.route('/q3')
 
         sequelize
             .query(
-            'SELECT * FROM Q3Table WHERE LAST_SEEN > '+ lastWeek.getTime() + ' AND BIRD_ID > -1', null,
+            'SELECT * FROM Q3Table WHERE LAST_SEEN < '+ lastWeek.getTime() + ' AND BIRD_ID > -1', null,
             { raw: true }, { }
         )
             .success(function(birds) {
