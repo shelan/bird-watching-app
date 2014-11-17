@@ -22,6 +22,8 @@ var sequelize = new Sequelize(
     config.user,
     config.password,
     {
+        host: config.host,
+        port: config.port,
         logging: console.log,
         define: {
             timestamps: false,
