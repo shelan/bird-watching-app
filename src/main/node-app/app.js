@@ -154,6 +154,22 @@ router.route('/q3')
     });
 
 
+router.route('/heartbeat')
+
+// get all the users (accessed at GET http://localhost:8080/birds)
+    .get(function(req, res) {
+
+        sequelize
+            .query(
+            'SELECT 1', null,
+            { raw: true }, { }
+        )
+            .success(function() {
+                res.send('{alive}');
+            })
+
+    });
+
 
 
 // Middleware to use for all requests
