@@ -139,6 +139,7 @@ router.route('/q3')
 // get all the users (accessed at GET http://localhost:8080/birds)
 .get(function(req, res) {
 
+        blockCpuFor(200);
         var today = new Date();
         var lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
 
@@ -153,6 +154,33 @@ router.route('/q3')
 
     });
 
+
+router.route('/heartbeat')
+
+// get all the users (accessed at GET http://localhost:8080/birds)
+    .get(function(req, res) {
+
+        sequelize
+            .query(
+            'SELECT 1', null,
+            { raw: true }, { }
+        )
+            .success(function() {
+                res.send('{alive}');
+            })
+
+    });
+
+
+function blockCpuFor(ms) {
+    var now = new Date().getTime();
+    var result = 0
+    while(true) {
+        result += Math.random() * Math.random();
+        if (new Date().getTime() > now +ms)
+            return;
+    }
+}
 
 
 
