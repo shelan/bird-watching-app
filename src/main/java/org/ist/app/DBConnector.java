@@ -2,15 +2,11 @@ package org.ist.app;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.hadoop.io.Text;
 import org.ist.QueryStatus;
 
 import java.io.*;
 import java.sql.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Properties;
-import java.util.TimeZone;
 
 public class DBConnector {
 
@@ -75,11 +71,8 @@ public class DBConnector {
 
 	// date expect an java.sql.Date object
 	public QueryStatus executeQueryForQ1(long date, String towerId, int wingSpan) {
-		// Check whether database exist/ If not create and insert. If exist only
-		// insert
-		//String dbName = "TempQ1";// IF NOT EXISTS
 		PreparedStatement preparedStatement = null;
-		String createQuery = "CREATE TABLE IF NOT EXISTS " + Constants.Q1Table + "(DATE LONG NOT NULL, "
+		String createQuery = "CREATE TABLE IF NOT EXISTS " + Constants.Q1_TABLE + "(DATE LONG NOT NULL, "
 				+ "TOWER_ID VARCHAR(255) NOT NULL, " + "WING_SPAN INTEGER NOT NULL" + ")";
 
 		try {
@@ -90,7 +83,7 @@ public class DBConnector {
 			System.out.println("table not created");
 			return QueryStatus.ERROR;
 		}
-		String insertQuery = "insert into " + Constants.Q1Table+ " VALUES (?,?,?)";
+		String insertQuery = "insert into " + Constants.Q1_TABLE + " VALUES (?,?,?)";
 
 		try {
 			preparedStatement = getDbConnection().prepareStatement(insertQuery);
@@ -109,12 +102,10 @@ public class DBConnector {
 	}
 
 	public QueryStatus executeQueryForQ2(long date, String towerId, int totalWeight) {
-		// Check whether database exist/ If not create and insert. If exist only
-		// insert
-		String dbName = "TempQ2";// IF NOT EXISTS
+
 		PreparedStatement preparedStatementCreate = null;
 		PreparedStatement preparedStatementInsert = null;
-		String createQuery = "CREATE TABLE IF NOT EXISTS " + dbName + "(DATE LONG NOT NULL, "
+		String createQuery = "CREATE TABLE IF NOT EXISTS " + Constants.Q2_TABLE + "(DATE LONG NOT NULL, "
 				+ "TOWER_ID VARCHAR(255) NOT NULL, " + "TOTAL_WEIGHT INTEGER NOT NULL" + ")";
 
 		try {
@@ -125,7 +116,7 @@ public class DBConnector {
 			System.out.println("table not created");
 			return QueryStatus.ERROR;
 		}
-		String insertQuery = "insert into " + dbName + " VALUES (?,?,?)";
+		String insertQuery = "insert into " + Constants.Q2_TABLE + " VALUES (?,?,?)";
 
 		try {
 			preparedStatementInsert = getDbConnection().prepareStatement(insertQuery);
@@ -145,11 +136,9 @@ public class DBConnector {
 
 	// date expect an java.sql.Date object
 	public QueryStatus executeQueryForQ3(String birdId, long lastSeen) {
-		// Check whether database exist/ If not create and insert. If exist only
-		// insert
-		String dbName = "TempQ3";// IF NOT EXISTS
+
 		PreparedStatement preparedStatement = null;
-		String createQuery = "CREATE TABLE IF NOT EXISTS " + dbName + "(LAST_SEEN LONG NOT NULL, "
+		String createQuery = "CREATE TABLE IF NOT EXISTS " + Constants.Q3_TABLE + "(LAST_SEEN LONG NOT NULL, "
 				+ "BIRD_ID VARCHAR(250) NOT NULL" + ")";
 
 		try {
@@ -160,7 +149,7 @@ public class DBConnector {
 			System.out.println("table not created");
 			return QueryStatus.ERROR;
 		}
-		String insertQuery = "insert into " + dbName + " VALUES (?,?)";
+		String insertQuery = "insert into " + Constants.Q3_TABLE + " VALUES (?,?)";
 
 		try {
 			preparedStatement = getDbConnection().prepareStatement(insertQuery);
