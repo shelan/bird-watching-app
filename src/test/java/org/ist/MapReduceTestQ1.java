@@ -1,11 +1,5 @@
 package org.ist;
 
-/**
- * Created by ashansa on 11/10/14.
- *
- *
- */
-
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mrunit.mapreduce.MapDriver;

@@ -1,11 +1,5 @@
 package org.ist;
 
-/**
- * Created by shelan on 10/11/14.
- *
- *
- */
-
 import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
 import org.junit.Before;
 import org.junit.Test;
