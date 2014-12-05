@@ -106,7 +106,7 @@ router.route('/q1/:date')
     
     sequelize
   .query(
-    'SELECT * FROM Q1Table WHERE DATE= :date ', null,
+    'SELECT * FROM Q1_TABLE WHERE DATE= :date ', null,
     { raw: true }, {  date: req.params.date }
   )
   .success(function(birds) {
@@ -123,7 +123,7 @@ router.route('/q2/:date/:tower_id')
 
 sequelize
   .query(
-    'SELECT * FROM Q2Table WHERE TOWER_ID = :tower_id AND DATE= :date ', null,
+    'SELECT * FROM Q2_TABLE WHERE TOWER_ID = :tower_id AND DATE= :date ', null,
     { raw: true }, { tower_id: req.params.tower_id, date: req.params.date }
   )
   .success(function(birds) {
@@ -145,7 +145,7 @@ router.route('/q3')
 
         sequelize
             .query(
-            'SELECT * FROM Q3Table WHERE LAST_SEEN < '+ lastWeek.getTime() + ' AND BIRD_ID > -1', null,
+            'SELECT * FROM Q3_TABLE WHERE LAST_SEEN < '+ lastWeek.getTime() + ' AND BIRD_ID > -1', null,
             { raw: true }, { }
         )
             .success(function(birds) {
